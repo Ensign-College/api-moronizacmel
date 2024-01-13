@@ -1,7 +1,7 @@
 {
     "name": "Node.js",
     "dockerComposeFile": "docker-compose.yml",
-    "service": "app",
+    "service": "devcontainer",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "waitFor": "onCreateCommand",
     "updateContentCommand": "npm install",
@@ -11,7 +11,7 @@
       "server": "npm run dev"
     },
     "forwardPorts": [
-      3000,8080
+      3000,6379,8080
     ],
     "portsAttributes": {
       "3000": {

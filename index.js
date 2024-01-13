@@ -7,10 +7,11 @@ const boxes = [
     {boxID:1},
     {boxID:2},
     {boxID:3},
+    {boxID:4},
 
 ];
 
-app.get('/', (req, res) => {
+app.get('/boxes', (req, res) => {
     res.send(boxes)
   })
   
