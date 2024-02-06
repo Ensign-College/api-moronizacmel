@@ -2,11 +2,18 @@ const express = require('express');
 const Redis = require('redis');
 const bodyParser = require('body-parser');
 
+const cors = require('cors');
+
+const options = {
+  origin: "http://localhost:3000"
+}
+
 const redisClient = Redis.createClient({
   url: `redis://localhost:6379`
 });
 const app = express();
 app.use(bodyParser.json());
+app.use(cors(options));
 
 app.get('/boxes', async (req, res) => {
   let boxes = await redisClient.json.get('boxes', {path: '$'});
@@ -18,15 +25,13 @@ app.post('/boxes',async (req, res) => {
   newBox.id = parseInt(await redisClient.json.arrLen('boxes', '$') + 1);
   await redisClient.json.set('boxes', '$', newBox);
   res.json(newBox);
+})
 
-  })
-  
-const port = 3000;
+const port = 3001;
 
 app.listen(port, ()=>{
   redisClient.connect();
   console.log(`Listening on port: ${port} `)
-
 });
 
 console.log("Hello World");
