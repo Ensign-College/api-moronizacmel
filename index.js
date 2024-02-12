@@ -59,7 +59,7 @@ app.post('/sendPayment', async(req,res)=>{
       };
 
       const currentDate = new Date().toISOString().replace(/:/g, '-');
-      const paymentKey = `${currentDate}`;
+      const paymentKey = `payment.${currentDate}`;
 
       await redisClient.json.set(paymentKey, '.', payment);
       res.status(200).json({ message: 'Payment successfully stored in Redis' });
