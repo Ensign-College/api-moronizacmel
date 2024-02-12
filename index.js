@@ -11,6 +11,7 @@ const options = {
 const redisClient = Redis.createClient({
   url: `redis://localhost:6379`
 });
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors(options));
@@ -26,6 +27,48 @@ app.post('/boxes',async (req, res) => {
   await redisClient.json.set('boxes', '$', newBox);
   res.json(newBox);
 })
+
+app.post('/sendPayment', async(req,res)=>{
+  try {
+      const {
+          customerId,
+          billingAddress,
+          billingCity,
+          billingState,
+          billingZipCode,
+          totalAmount,
+          paymentId,
+          cardId,
+          cardType,
+          last4digits,
+          orderId
+      } = req.body;
+
+      const payment = {
+          customerId,
+          billingAddress,
+          billingCity,
+          billingState,
+          billingZipCode,
+          totalAmount,
+          paymentId,
+          cardId,
+          cardType,
+          last4digits,
+          orderId
+      };
+
+      const currentDate = new Date().toISOString().replace(/:/g, '-');
+      const paymentKey = `${currentDate}`;
+
+      await redisClient.json.set(paymentKey, '.', payment);
+      res.status(200).json({ message: 'Payment successfully stored in Redis' });
+
+  } catch (error) {
+      console.error('Error storing payment in Redis:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 const port = 3001;
 
