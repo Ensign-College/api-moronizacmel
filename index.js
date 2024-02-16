@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 const cors = require('cors');
 
+
 const options = {
   origin: "http://localhost:3000"
 }
@@ -28,10 +29,11 @@ app.post('/boxes',async (req, res) => {
   res.json(newBox);
 })
 
-app.post('/sendPayment', async(req,res)=>{
+app.post('/pay', async(req,res)=>{
   try {
       const {
           customerId,
+          customerPhone,
           billingAddress,
           billingCity,
           billingState,
@@ -46,6 +48,7 @@ app.post('/sendPayment', async(req,res)=>{
 
       const payment = {
           customerId,
+          customerPhone,
           billingAddress,
           billingCity,
           billingState,
@@ -59,7 +62,7 @@ app.post('/sendPayment', async(req,res)=>{
       };
 
       const currentDate = new Date().toISOString().replace(/:/g, '-');
-      const paymentKey = `payment.${currentDate}`;
+      const paymentKey = `payment.${customerPhone}.${currentDate}`;
 
       await redisClient.json.set(paymentKey, '.', payment);
       res.status(200).json({ message: 'Payment successfully stored in Redis' });
@@ -69,6 +72,48 @@ app.post('/sendPayment', async(req,res)=>{
       res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+app.get('/payments', async (req, res) => {
+  try {
+    const paymentKeys = await redisClient.keys('payment.*');
+
+    const payments = await Promise.all(paymentKeys.map(async (key) => {
+      return await redisClient.json.get(key, {path: '$'});
+    }));
+
+    res.json(payments);
+  } catch (error) {
+    console.error('Error retrieving payments from Redis:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+app.get('/payments/user/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    
+    const paymentKeys = await redisClient.keys('payment.*');
+
+    const userPayments = [];
+
+    for (const key of paymentKeys) {
+
+      const payment = await redisClient.json.get(key, {path: '$'});
+
+      if (payment[0].customerId == userId) {
+        userPayments.push(payment);
+      }
+    }
+
+    res.json(userPayments);
+  } catch (error) {
+    console.error('Error retrieving user payments from Redis:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 const port = 3001;
 
