@@ -69,7 +69,7 @@ app.post('/pay', async(req,res)=>{
       };
 
       const currentDate = new Date().toISOString().replace(/:/g, '-');
-      const paymentKey = `payment.${customerPhone}.${currentDate}`;
+      const paymentKey = `payment:${customerPhone}.${currentDate}`;
 
       await redisClient.json.set(paymentKey, '.', payment);
       res.status(200).json({ message: 'Payment successfully stored in Redis' });
@@ -82,7 +82,7 @@ app.post('/pay', async(req,res)=>{
 
 app.get('/payments', async (req, res) => {
   try {
-    const paymentKeys = await redisClient.keys('payment.*');
+    const paymentKeys = await redisClient.keys('payment:*');
 
     const payments = await Promise.all(paymentKeys.map(async (key) => {
       return await redisClient.json.get(key, {path: '$'});
@@ -100,7 +100,7 @@ app.get('/payments/user/:id', async (req, res) => {
   try {
     const userId = req.params.id;
     
-    const paymentKeys = await redisClient.keys('payment.*');
+    const paymentKeys = await redisClient.keys('payment:*');
 
     const userPayments = [];
 
