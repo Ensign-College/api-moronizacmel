@@ -46,12 +46,14 @@ app.post('/pay', async(req,res)=>{
           billingState,
           billingZipCode,
           totalAmount,
-          paymentId,
           cardId,
           cardType,
           last4digits,
           orderId
       } = req.body;
+
+      const currentDate = new Date().toISOString().replace(/:/g, '-');
+      const paymentKey = `payment:${customerPhone}.${currentDate}`;
 
       const payment = {
           customerId,
@@ -61,15 +63,12 @@ app.post('/pay', async(req,res)=>{
           billingState,
           billingZipCode,
           totalAmount,
-          paymentId,
+          paymentId: paymentKey,
           cardId,
           cardType,
           last4digits,
           orderId
       };
-
-      const currentDate = new Date().toISOString().replace(/:/g, '-');
-      const paymentKey = `payment:${customerPhone}.${currentDate}`;
 
       await redisClient.json.set(paymentKey, '.', payment);
       res.status(200).json({ message: 'Payment successfully stored in Redis' });
@@ -114,6 +113,25 @@ app.get('/payments/user/:id', async (req, res) => {
     }
 
     res.json(userPayments);
+  } catch (error) {
+    console.error('Error retrieving user payments from Redis:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/payment/:id', async (req, res) => {
+  try {
+    const orderId = req.params.id;
+    
+    const paymentKey = `payment:${orderId}`;
+    
+    const payment = await redisClient.json.get(paymentKey);
+    
+    if (!payment) {
+      return res.status(404).json({ error: 'Payment not found' });
+    }
+    
+    res.json(payment);
   } catch (error) {
     console.error('Error retrieving user payments from Redis:', error);
     res.status(500).json({ error: 'Internal server error' });
