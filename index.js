@@ -52,7 +52,7 @@ app.post('/pay', async(req,res)=>{
           orderId
       } = req.body;
 
-      const currentDate = new Date().toISOString().replace(/:/g, '-');
+      const currentDate = new Date().now().toString();
       const paymentKey = `payment:${customerPhone}.${currentDate}`;
 
       const payment = {
