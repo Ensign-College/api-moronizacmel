@@ -2,23 +2,28 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 
 Resources:
-#  MyLambdaFunction:
-#    Type: 'AWS::Serverless::Function'
-#    Properties:
-#      Handler: index.handler
-#      Runtime: nodejs14.x
-#      CodeUri: ./lambda
-#      MemorySize: 128
-#      Timeout: 30
-#      Environment:
-#        Variables:
-#          REDIS_HOST: !GetAtt MyElasticacheRedis.RedisEndpointAddress
-#      Events:
-#        MyApi:
-#          Type: Api
-#          Properties:
-#            Path: /myendpoint
-#            Method: get
+  MyLambdaFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs14.x
+      CodeUri: ./lambda
+      MemorySize: 128
+      Timeout: 30
+      VpcConfig:
+        SubnetIds:
+          - !Ref MySubnet
+        SecurityGroupIds:
+          - !Ref MySecurityGroup
+      Environment:
+        Variables:
+          REDIS_HOST: !GetAtt MyElasticacheRedis.ConfigurationEndpoint.Address
+      Events:
+        MyApi:
+          Type: Api
+          Properties:
+            Path: /myendpoint
+            Method: get
 
   MyVPC:
     Type: AWS::EC2::VPC
@@ -60,8 +65,10 @@ Resources:
           ToPort: 6379
           CidrIp: 0.0.0.0/0
 
-#Outputs:
-#  MyApiEndpoint:
-#    Description: "API Gateway endpoint URL"
-#    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/myendpoint"
-#  RedisEndpoint: Description: "ElastiCache Redis Endpoint" Value: !GetAtt MyElasticacheRedis.ConfigurationEndpoint.Address
+Outputs:
+  MyApiEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/myendpoint"
+  RedisEndpoint:
+    Description: "ElastiCache Redis Endpoint"
+    Value: !GetAtt MyElasticacheRedis.ConfigurationEndpoint.Address
