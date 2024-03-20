@@ -17,7 +17,7 @@ Resources:
           - !Ref MySecurityGroup
       Environment:
         Variables:
-          REDIS_HOST: !GetAtt MyElasticacheRedis.ConfigurationEndpoint.Address
+          REDIS_HOST: !Select [0, !GetAtt MyElasticacheRedis.ConfigurationEndpoint.NodeAddresses]
       Events:
         MyApi:
           Type: Api
