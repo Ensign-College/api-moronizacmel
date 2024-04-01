@@ -144,10 +144,6 @@ app.get('/payment/:id', async (req, res) => {
 
 
 
-
-
-
-
 // Order
 app.post("/orders", async (req, res) => {
   let order = req.body;
@@ -187,23 +183,6 @@ app.post("/orderItems", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const port = 3001;
