@@ -46,7 +46,7 @@ Resources:
   SendPaymentFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: sendPaymentHandler
+      Handler: index.sendPaymentHandler
       Runtime: nodejs20.x
       CodeUri: .
       Events:
@@ -61,7 +61,7 @@ Resources:
   GetPaymentFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: getPaymentHandler
+      Handler: index.getPaymentHandler
       Runtime: nodejs20.x
       CodeUri: .
       Events:
@@ -75,7 +75,7 @@ Resources:
   GetPaymentsPerCustomerFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: getPaymentsPerCustomerHandler
+      Handler: index.getPaymentsPerCustomerHandler
       Runtime: nodejs20.x
       CodeUri: .
       Events:
@@ -89,7 +89,7 @@ Resources:
   AddOrderFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: addOrderHandler
+      Handler: index.addOrderHandler
       Runtime: nodejs20.x
       CodeUri: .
       Events:
@@ -103,7 +103,7 @@ Resources:
   GetOrderFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: getOrderHandler
+      Handler: index.getOrderHandler
       Runtime: nodejs20.x
       CodeUri: .
       Events:
@@ -117,7 +117,7 @@ Resources:
   AddOrderItemFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: addOrderItemHandler
+      Handler: index.addOrderItemHandler
       Runtime: nodejs20.x
       CodeUri: .
       Events:
