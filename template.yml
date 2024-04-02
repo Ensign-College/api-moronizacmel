@@ -49,9 +49,20 @@ Resources:
       Handler: index.sendPaymentHandler
       Runtime: nodejs20.x
       CodeUri: .
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          REDIS_HOST: !GetAtt MyElasticacheRedis.RedisEndpoint.Address
+          REDIS_PORT: !GetAtt MyElasticacheRedis.RedisEndpoint.Port
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt MySecurityGroup.GroupId
+        SubnetIds:
+          - !Ref MySubnet
       Events:
         SendPaymentEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /sendPayment
             Method: post
@@ -64,9 +75,20 @@ Resources:
       Handler: index.getPaymentHandler
       Runtime: nodejs20.x
       CodeUri: .
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          REDIS_HOST: !GetAtt MyElasticacheRedis.RedisEndpoint.Address
+          REDIS_PORT: !GetAtt MyElasticacheRedis.RedisEndpoint.Port
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt MySecurityGroup.GroupId
+        SubnetIds:
+          - !Ref MySubnet
       Events:
         GetPaymentEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /getPayment
             Method: get
@@ -78,9 +100,20 @@ Resources:
       Handler: index.getPaymentsPerCustomerHandler
       Runtime: nodejs20.x
       CodeUri: .
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          REDIS_HOST: !GetAtt MyElasticacheRedis.RedisEndpoint.Address
+          REDIS_PORT: !GetAtt MyElasticacheRedis.RedisEndpoint.Port
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt MySecurityGroup.GroupId
+        SubnetIds:
+          - !Ref MySubnet
       Events:
         GetPaymentsPerCustomerEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /getPaymentsPerCustomer/{customerId}
             Method: get
@@ -92,9 +125,20 @@ Resources:
       Handler: index.addOrderHandler
       Runtime: nodejs20.x
       CodeUri: .
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          REDIS_HOST: !GetAtt MyElasticacheRedis.RedisEndpoint.Address
+          REDIS_PORT: !GetAtt MyElasticacheRedis.RedisEndpoint.Port
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt MySecurityGroup.GroupId
+        SubnetIds:
+          - !Ref MySubnet
       Events:
         AddOrderEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /addOrder
             Method: post
@@ -106,9 +150,20 @@ Resources:
       Handler: index.getOrderHandler
       Runtime: nodejs20.x
       CodeUri: .
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          REDIS_HOST: !GetAtt MyElasticacheRedis.RedisEndpoint.Address
+          REDIS_PORT: !GetAtt MyElasticacheRedis.RedisEndpoint.Port
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt MySecurityGroup.GroupId
+        SubnetIds:
+          - !Ref MySubnet
       Events:
         GetOrderEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /getOrder/{orderId}
             Method: get
@@ -120,9 +175,20 @@ Resources:
       Handler: index.addOrderItemHandler
       Runtime: nodejs20.x
       CodeUri: .
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          REDIS_HOST: !GetAtt MyElasticacheRedis.RedisEndpoint.Address
+          REDIS_PORT: !GetAtt MyElasticacheRedis.RedisEndpoint.Port
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt MySecurityGroup.GroupId
+        SubnetIds:
+          - !Ref MySubnet
       Events:
         AddOrderItemEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
             Path: /addOrderItem
             Method: post
