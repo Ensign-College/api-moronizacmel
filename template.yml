@@ -2,42 +2,23 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 
 Resources:
-  # # MyVPC:
-  # #   Type: AWS::EC2::VPC
-  # #   Properties:
-  # #     CidrBlock: 10.0.0.0/16
-
-  # # MySubnet:
-  # #   Type: AWS::EC2::Subnet
-  # #   Properties:
-  # #     VpcId: !Ref MyVPC
-  # #     CidrBlock: 10.0.0.0/24
-
-  # MyElasticacheSubnetGroup:
-  #   Type: AWS::ElastiCache::SubnetGroup
+  # MyVPC:
+  #   Type: AWS::EC2::VPC
   #   Properties:
-  #     Description: Subnet group for ElastiCache
-  #     SubnetIds:
-  #       - subnet-02c217f126c0ce1d5
+  #     CidrBlock: 10.0.0.0/16
 
-  MyVPC:
-    Type: AWS::EC2::VPC
-    Properties:
-      CidrBlock: 10.0.0.0/16
-
-  MySubnet:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref MyVPC
-      CidrBlock: 10.0.0.0/24
+  # MySubnet:
+  #   Type: AWS::EC2::Subnet
+  #   Properties:
+  #     VpcId: !Ref MyVPC
+  #     CidrBlock: 10.0.0.0/24
 
   MyElasticacheSubnetGroup:
     Type: AWS::ElastiCache::SubnetGroup
     Properties:
       Description: Subnet group for ElastiCache
       SubnetIds:
-        # - subnet-02c217f126c0ce1d5
-        - !Ref MySubnet
+        - subnet-02c217f126c0ce1d5
 
   MyElasticacheRedis:
     Type: 'AWS::ElastiCache::CacheCluster'
@@ -78,7 +59,7 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - !Ref MySubnet
+          - subnet-02c217f126c0ce1d5
       Events:
         SendPaymentEvent:
           Type: HttpApi
@@ -104,7 +85,7 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - !Ref MySubnet
+          - subnet-02c217f126c0ce1d5
       Events:
         GetPaymentEvent:
           Type: HttpApi
@@ -129,7 +110,7 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - !Ref MySubnet
+          - subnet-02c217f126c0ce1d5
       Events:
         GetPaymentsPerCustomerEvent:
           Type: HttpApi
@@ -154,7 +135,7 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - !Ref MySubnet
+          - subnet-02c217f126c0ce1d5
       Events:
         AddOrderEvent:
           Type: HttpApi
@@ -179,7 +160,7 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - !Ref MySubnet
+          - subnet-02c217f126c0ce1d5
       Events:
         GetOrderEvent:
           Type: HttpApi
@@ -204,7 +185,7 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - !Ref MySubnet
+          - subnet-02c217f126c0ce1d5
       Events:
         AddOrderItemEvent:
           Type: HttpApi
