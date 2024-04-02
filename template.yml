@@ -2,23 +2,42 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 
 Resources:
-  # MyVPC:
-  #   Type: AWS::EC2::VPC
-  #   Properties:
-  #     CidrBlock: 10.0.0.0/16
+  # # MyVPC:
+  # #   Type: AWS::EC2::VPC
+  # #   Properties:
+  # #     CidrBlock: 10.0.0.0/16
 
-  # MySubnet:
-  #   Type: AWS::EC2::Subnet
+  # # MySubnet:
+  # #   Type: AWS::EC2::Subnet
+  # #   Properties:
+  # #     VpcId: !Ref MyVPC
+  # #     CidrBlock: 10.0.0.0/24
+
+  # MyElasticacheSubnetGroup:
+  #   Type: AWS::ElastiCache::SubnetGroup
   #   Properties:
-  #     VpcId: !Ref MyVPC
-  #     CidrBlock: 10.0.0.0/24
+  #     Description: Subnet group for ElastiCache
+  #     SubnetIds:
+  #       - subnet-02c217f126c0ce1d5
+
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+
+  MySubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: 10.0.0.0/24
 
   MyElasticacheSubnetGroup:
     Type: AWS::ElastiCache::SubnetGroup
     Properties:
       Description: Subnet group for ElastiCache
       SubnetIds:
-        - subnet-02c217f126c0ce1d5
+        # - subnet-02c217f126c0ce1d5
+        - !Ref MySubnet
 
   MyElasticacheRedis:
     Type: 'AWS::ElastiCache::CacheCluster'
