@@ -6,14 +6,30 @@ const fs = require("fs");
 const Schema = JSON.parse(fs.readFileSync("./orderItemSchema.json", "utf8"));
 const Ajv = require("ajv");
 const ajv = new Ajv();
+
+// const redisClient = Redis.createClient({
+//     url: `redis://${process.env.REDIS_HOST}:6379`
+// });
+
+const redisHost = process.env.REDIS_HOST;
+const redisPort = process.env.REDIS_PORT;
+
 const redisClient = Redis.createClient({
-    url: `redis://${process.env.REDIS_HOST}:6379`
-});
+    socket: {
+      host: redisHost,
+      port: redisPort
+    },
+    tls: {},
+    ssl: true,
+  });
+
+  redisClient.on('error', err => console.error('Error de conexión con ElastiCache:', err));
+
 
 // Function to handle POST requests for adding boxes
 exports.addBoxHandler = async (event, context) => {
 
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         const requestBody = JSON.parse(event.body);
@@ -36,7 +52,7 @@ exports.addBoxHandler = async (event, context) => {
 
 // Function to handle GET requests for boxes
 exports.getBoxesHandler = async (event, context) => {
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         let boxes = await redisClient.json.get('boxes', { path: '$' });
@@ -54,7 +70,7 @@ exports.getBoxesHandler = async (event, context) => {
 
 // Function to handle POST requests for sending payments
 exports.sendPaymentHandler = async (event, context) => {
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         const requestBody = JSON.parse(event.body);
@@ -113,7 +129,7 @@ exports.sendPaymentHandler = async (event, context) => {
 
 // Function to handle GET requests for payment by ID
 exports.getPaymentHandler = async (event, context) => {
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         const paymentId = event.pathParameters.paymentId;
@@ -144,7 +160,7 @@ exports.getPaymentHandler = async (event, context) => {
 
 // Function to handle GET requests for payments per customer
 exports.getPaymentsPerCustomerHandler = async (event, context) => {
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         const customerId = event.pathParameters.customerId;
@@ -195,7 +211,7 @@ exports.getPaymentsPerCustomerHandler = async (event, context) => {
 
 // Function to handle POST requests for orders
 exports.addOrderHandler = async (event, context) => {
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         const requestBody = JSON.parse(event.body);
@@ -226,7 +242,7 @@ exports.addOrderHandler = async (event, context) => {
 
 // Function to handle GET requests for orders by ID
 exports.getOrderHandler = async (event, context) => {
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         const orderId = event.pathParameters.orderId;
@@ -255,7 +271,7 @@ exports.getOrderHandler = async (event, context) => {
 
 // Function to handle POST requests for order items
 exports.addOrderItemHandler = async (event, context) => {
-    redisClient.connect();
+    await redisClient.connect();
 
     try {
         const requestBody = JSON.parse(event.body);
