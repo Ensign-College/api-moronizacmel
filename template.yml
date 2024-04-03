@@ -59,7 +59,7 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - !Ref MySubnet
+          - subnet-02c217f126c0ce1d5
       Events:
         HttpApi:
           Type: HttpApi
