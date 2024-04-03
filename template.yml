@@ -59,9 +59,9 @@ Resources:
         SecurityGroupIds:
           - !GetAtt MySecurityGroup.GroupId
         SubnetIds:
-          - subnet-02c217f126c0ce1d5
+          - !Ref MySubnet
       Events:
-        SendPaymentEvent:
+        HttpApi:
           Type: HttpApi
           Properties:
             Path: /sendPayment
@@ -87,7 +87,7 @@ Resources:
         SubnetIds:
           - subnet-02c217f126c0ce1d5
       Events:
-        GetPaymentEvent:
+        HttpApi:
           Type: HttpApi
           Properties:
             Path: /getPayment
@@ -112,7 +112,7 @@ Resources:
         SubnetIds:
           - subnet-02c217f126c0ce1d5
       Events:
-        GetPaymentsPerCustomerEvent:
+        HttpApi:
           Type: HttpApi
           Properties:
             Path: /getPaymentsPerCustomer/{customerId}
@@ -137,7 +137,7 @@ Resources:
         SubnetIds:
           - subnet-02c217f126c0ce1d5
       Events:
-        AddOrderEvent:
+        HttpApi:
           Type: HttpApi
           Properties:
             Path: /addOrder
@@ -162,7 +162,7 @@ Resources:
         SubnetIds:
           - subnet-02c217f126c0ce1d5
       Events:
-        GetOrderEvent:
+        HttpApi:
           Type: HttpApi
           Properties:
             Path: /getOrder/{orderId}
@@ -187,7 +187,7 @@ Resources:
         SubnetIds:
           - subnet-02c217f126c0ce1d5
       Events:
-        AddOrderItemEvent:
+        HttpApi:
           Type: HttpApi
           Properties:
             Path: /addOrderItem

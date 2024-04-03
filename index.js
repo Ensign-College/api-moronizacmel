@@ -23,8 +23,8 @@ const redisClient = Redis.createClient({
     ssl: true,
   });
 
-  redisClient.on('error', err => console.error('Error de conexión con ElastiCache:', err));
-
+  redisClient.on('error', (error) => {console.error('Redis error:', error);});  
+  redisClient.on('ready', () => {console.log('Redis connection established');}); 
 
 // Function to handle POST requests for adding boxes
 exports.addBoxHandler = async (event, context) => {
