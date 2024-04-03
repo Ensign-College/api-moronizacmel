@@ -192,3 +192,18 @@ Resources:
           Properties:
             Path: /addOrderItem
             Method: post
+
+  ZacMelLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ZacMelLambdaRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      MaznagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
