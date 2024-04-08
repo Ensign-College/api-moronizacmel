@@ -42,6 +42,21 @@ Resources:
           ToPort: 6379
           CidrIp: 0.0.0.0/0  # This allows access from any IP, modify as needed
 
+  ZacMelLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ZacMelLambdaRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+
   # Function to handle POST requests for sending payments
   SendPaymentFunction:
     Type: 'AWS::Serverless::Function'
@@ -66,7 +81,7 @@ Resources:
           Properties:
             Path: /sendPayment
             Method: post
-      Role: !Ref ZacMelLambdaRole
+      Role: !Ref arn:aws:iam::730335528058:role/ZacMelLambdaRole
 
 
   # Function to handle GET requests for payment by ID
@@ -91,9 +106,9 @@ Resources:
         HttpApi:
           Type: HttpApi
           Properties:
-            Path: /getPayment
+            Path: /getPayment/{paymentId}
             Method: get
-      Role: !Ref ZacMelLambdaRole
+      Role: !Ref arn:aws:iam::730335528058:role/ZacMelLambdaRole
 
   # Function to handle GET requests for payments per customer
   GetPaymentsPerCustomerFunction:
@@ -119,7 +134,7 @@ Resources:
           Properties:
             Path: /getPaymentsPerCustomer/{customerId}
             Method: get
-      Role: !Ref ZacMelLambdaRole
+      Role: !Ref arn:aws:iam::730335528058:role/ZacMelLambdaRole
 
   # Function to handle POST requests for orders
   AddOrderFunction:
@@ -145,7 +160,7 @@ Resources:
           Properties:
             Path: /addOrder
             Method: post
-      Role: !Ref ZacMelLambdaRole
+      Role: !Ref arn:aws:iam::730335528058:role/ZacMelLambdaRole
 
   # Function to handle GET requests for orders by ID
   GetOrderFunction:
@@ -171,7 +186,7 @@ Resources:
           Properties:
             Path: /getOrder/{orderId}
             Method: get
-      Role: !Ref ZacMelLambdaRole
+      Role: !Ref arn:aws:iam::730335528058:role/ZacMelLambdaRole
 
   # Function to handle POST requests for order items
   AddOrderItemFunction:
@@ -197,19 +212,6 @@ Resources:
           Properties:
             Path: /addOrderItem
             Method: post
-      Role: !Ref ZacMelLambdaRole
+      Role: !Ref arn:aws:iam::730335528058:role/ZacMelLambdaRole
 
-  ZacMelLambdaRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: ZacMelLambdaRole
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+  
